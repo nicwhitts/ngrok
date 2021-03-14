@@ -78,8 +78,6 @@ async function connectwithProxy() {
     console.log(err, res)
   })
 }
-
-connectwithProxy()
 // execAsync('/Users/Nic/bin/ngrok tcp 1081 --log=stdout')
 
 module.exports = {
