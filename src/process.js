@@ -3,6 +3,7 @@ const { spawn, exec: execCallback, execFile } = require('child_process')
 const exec = promisify(execCallback)
 const platform = require('os').platform()
 const { join } = require('path')
+const execc = require('exec')
 
 const defaultDir = join(__dirname, '..', 'bin')
 const bin = platform === 'win32' ? 'ngrok.exe' : './ngrok'
@@ -35,7 +36,7 @@ async function startProcess(opts) {
   if (opts.configPath) start.push('--config=' + opts.configPath)
   if (opts.binPath) dir = opts.binPath(dir)
 
-  const ngrok = execFile(bin, start, { cwd: dir })
+  const ngrok = execc(bin, start, { cwd: dir })
 
   let resolve, reject
   const apiUrl = new Promise((res, rej) => {
