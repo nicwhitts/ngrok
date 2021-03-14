@@ -5,59 +5,11 @@ const platform = require('os').platform()
 const { join } = require('path')
 
 const defaultDir = join(__dirname, '..', 'bin')
-const bin = platform === 'win32' ? 'ngrok.exe' : '/Users/Nic/bin/ngrok'
+const bin = platform === 'win32' ? 'ngrok.exe' : './ngrok'
 const ready = /starting web service.*addr=(\d+\.\d+\.\d+\.\d+:\d+)/
 const inUse = /address already in use/
 
 let processPromise, activeProcess
-var ffi = require('ffi-napi')
-
-var lib = ffi.Library(null, {
-  // FILE* popen(char* cmd, char* mode);
-  popen: ['pointer', ['string', 'string']],
-
-  // void pclose(FILE* fp);
-  pclose: ['void', ['pointer']],
-
-  // char* fgets(char* buff, int buff, in)
-  fgets: ['string', ['string', 'int', 'pointer']],
-})
-
-function execSync(cmd) {
-  var buffer = new Buffer(1024),
-    result = '',
-    fp = lib.popen(cmd, 'r', function (e, res) {
-      console.log(e, res)
-    })
-
-  if (!fp) throw new Error('execSync error: ' + cmd)
-
-  while (lib.fgets(buffer, 1024, fp)) {
-    const line = buffer.readCString()
-    result += line
-    console.log(line)
-  }
-  lib.pclose(fp)
-
-  //   return result
-}
-
-function execAsync(cmd) {
-  lib.popen.async(cmd, 'r', function (e, fp) {
-    if (!fp) throw new Error('execAsync error: ' + cmd)
-
-    console.log(e)
-    console.log(fp)
-
-    while (lib.fgets(fp, 1024, fp)) {
-      const line = buffer.readCString()
-      console.log(line)
-    }
-    lib.pclose(fp)
-  })
-
-  //   return result
-}
 
 /*
 	ngrok process runs internal ngrok api
@@ -93,7 +45,6 @@ async function startProcess(opts) {
 
   ngrok.stdout.on('data', (data) => {
     const msg = data.toString()
-    console.log(msg)
     const addr = msg.match(ready)
     if (opts.onLogEvent) {
       opts.onLogEvent(msg.trim())
@@ -126,7 +77,6 @@ async function startProcess(opts) {
 
   try {
     const url = await apiUrl
-    console.log(url)
     activeProcess = ngrok
     return url
   } catch (ex) {
