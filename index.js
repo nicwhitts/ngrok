@@ -7,6 +7,7 @@ const {
   getVersion,
 } = require('./src/process')
 const { defaults, validate, isRetriable } = require('./src/utils')
+const { connectwithProxy } = require('./tester')
 
 let processUrl = null
 let ngrokClient = null
@@ -69,6 +70,10 @@ function getApi() {
   return ngrokClient
 }
 
+function connectHttp() {
+  connectwithProxy()
+}
+
 module.exports = {
   connect,
   disconnect,
@@ -77,6 +82,5 @@ module.exports = {
   getUrl,
   getApi,
   getVersion,
+  connectHttp,
 }
-
-connect(function (err, url) {})

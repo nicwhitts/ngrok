@@ -58,7 +58,7 @@ var libc = new ffi.Library(null, {
 
 var run = libc.system
 
-async function connect() {
+async function connectwithProxy() {
   startServer()
   const defaultDir = join(__dirname, '..', 'bin')
   const bin = platform === 'win32' ? 'ngrok.exe' : './ngrok'
@@ -79,5 +79,9 @@ async function connect() {
   })
 }
 
-connect()
+connectwithProxy()
 // execAsync('/Users/Nic/bin/ngrok tcp 1081 --log=stdout')
+
+module.exports = {
+  connectwithProxy,
+}
