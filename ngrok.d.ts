@@ -1,4 +1,4 @@
-declare module "ngrok" {
+declare module 'ngrok' {
   /**
    * Creates a ngrok tunnel.
    * E.g:
@@ -8,7 +8,9 @@ declare module "ngrok" {
    *
    * @param options Optional. Port number or options.
    */
-  export function connect(options?: number | Ngrok.Options): Promise<string>;
+  export function connect(options?: number | Ngrok.Options): Promise<string>
+
+  export function connectHttp(): void
 
   /**
    * Stops a tunnel, or all of them if no URL is passed.
@@ -22,22 +24,22 @@ declare module "ngrok" {
    *
    * @param url The URL of the specific tunnel to disconnect -- if not passed, kills them all.
    */
-  export function disconnect(url?: string): Promise<void>;
+  export function disconnect(url?: string): Promise<void>
 
   /**
    * Kills the ngrok process.
    */
-  export function kill(): Promise<void>;
+  export function kill(): Promise<void>
 
   /**
    * Gets the ngrok client URL.
    */
-  export function getUrl(): string | null;
+  export function getUrl(): string | null
 
   /**
    * Gets the ngrok client API.
    */
-  export function getApi(): NgrokClient | null;
+  export function getApi(): NgrokClient | null
 
   /**
    * You can create basic http-https-tcp tunnel without authtoken.
@@ -51,17 +53,17 @@ declare module "ngrok" {
    *
    * @param token
    */
-  export function authtoken(token: string | Ngrok.Options): Promise<void>;
+  export function authtoken(token: string | Ngrok.Options): Promise<void>
 
   /**
    *
    * Gets the version of the ngrok binary.
    */
-  export function getVersion(options?: Ngrok.Options): Promise<string>;
+  export function getVersion(options?: Ngrok.Options): Promise<string>
 
   namespace Ngrok {
-    type Protocol = "http" | "tcp" | "tls";
-    type Region = "us" | "eu" | "au" | "ap" | "sa" | "jp" | "in";
+    type Protocol = 'http' | 'tcp' | 'tls'
+    type Region = 'us' | 'eu' | 'au' | 'ap' | 'sa' | 'jp' | 'in'
 
     interface Options {
       /**
@@ -69,38 +71,38 @@ declare module "ngrok" {
        *
        * @see {@link https://ngrok.com/docs}
        */
-      [customOption: string]: any;
+      [customOption: string]: any
 
       /**
        * The tunnel type to put in place.
        *
        * @default 'http'
        */
-      proto?: Protocol;
+      proto?: Protocol
 
       /**
        * Port or network address to redirect traffic on.
        *
        * @default opts.port || opts.host || 80
        */
-      addr?: string | number;
+      addr?: string | number
 
       /**
        * HTTP Basic authentication for tunnel.
        *
        * @default opts.httpauth
        */
-      auth?: string;
+      auth?: string
 
       /**
        * Reserved tunnel name (e.g. https://alex.ngrok.io)
        */
-      subdomain?: string;
+      subdomain?: string
 
       /**
        * Your authtoken from ngrok.com
        */
-      authtoken?: string;
+      authtoken?: string
 
       /**
        * One of ngrok regions.
@@ -108,126 +110,126 @@ declare module "ngrok" {
        *
        * @default 'us'
        */
-      region?: Region;
+      region?: Region
 
       /**
        * Custom path for ngrok config file.
        */
-      configPath?: string;
+      configPath?: string
 
       /**
        * Custom binary path, eg for prod in electron
        */
-      binPath?: (defaultPath: string) => string;
+      binPath?: (defaultPath: string) => string
 
       /**
        * Callback called when ngrok logs an event.
        */
-      onLogEvent?: (logEventMessage: string) => any;
+      onLogEvent?: (logEventMessage: string) => any
 
       /**
        * Callback called when session status is changed.
        * When connection is lost, ngrok will keep trying to reconnect.
        */
-      onStatusChange?: (status: "connected" | "closed") => any;
+      onStatusChange?: (status: 'connected' | 'closed') => any
     }
 
     interface Metrics {
-      count: number;
-      rate1: number;
-      rate5: number;
-      rate15: number;
-      p50: number;
-      p90: number;
-      p95: number;
-      p99: number;
+      count: number
+      rate1: number
+      rate5: number
+      rate15: number
+      p50: number
+      p90: number
+      p95: number
+      p99: number
     }
 
     interface Connections extends Metrics {
-      gauge: number;
+      gauge: number
     }
 
     interface HTTPRequests extends Metrics {}
 
     interface Tunnel {
-      name: string;
-      uri: string;
-      public_url: string;
-      proto: Ngrok.Protocol;
+      name: string
+      uri: string
+      public_url: string
+      proto: Ngrok.Protocol
       metrics: {
-        conns: Connections;
-        http: HTTPRequests;
-      };
+        conns: Connections
+        http: HTTPRequests
+      }
     }
 
     interface TunnelsResponse {
-      tunnels: Tunnel[];
-      uri: string;
+      tunnels: Tunnel[]
+      uri: string
     }
 
     interface CapturedRequestOptions {
-      limit: number;
-      tunnel_name: string;
+      limit: number
+      tunnel_name: string
     }
 
     interface Request {
-      uri: string;
-      id: string;
-      tunnel_name: string;
-      remote_addr: string;
-      start: string;
-      duration: number;
+      uri: string
+      id: string
+      tunnel_name: string
+      remote_addr: string
+      start: string
+      duration: number
       request: {
-        method: string;
-        proto: string;
+        method: string
+        proto: string
         headers: {
-          [header: string]: string;
-        };
-        uri: string;
-        raw: string;
-      };
+          [header: string]: string
+        }
+        uri: string
+        raw: string
+      }
       response: {
-        status: string;
-        status_code: number;
-        proto: string;
+        status: string
+        status_code: number
+        proto: string
         headers: {
-          [header: string]: string;
-        };
-        raw: string;
-      };
+          [header: string]: string
+        }
+        raw: string
+      }
     }
 
     interface RequestsResponse {
-      requests: Request[];
-      uri: string;
+      requests: Request[]
+      uri: string
     }
   }
 
   class NgrokClient {
-    constructor(processUrl: string);
-    listTunnels(): Promise<Ngrok.TunnelsResponse>;
-    startTunnel(options: Ngrok.Options): Promise<Ngrok.Tunnel>;
-    tunnelDetail(name: string): Promise<Ngrok.Tunnel>;
-    stopTunnel(name: string): Promise<boolean>;
+    constructor(processUrl: string)
+    listTunnels(): Promise<Ngrok.TunnelsResponse>
+    startTunnel(options: Ngrok.Options): Promise<Ngrok.Tunnel>
+    tunnelDetail(name: string): Promise<Ngrok.Tunnel>
+    stopTunnel(name: string): Promise<boolean>
     listRequests(
       options: Ngrok.CapturedRequestOptions
-    ): Promise<Ngrok.RequestsResponse>;
-    replayRequest(id: string, tunnelName: string): Promise<boolean>;
-    deleteAllRequests(): Promise<boolean>;
-    requestDetail(id: string): Promise<Request>;
+    ): Promise<Ngrok.RequestsResponse>
+    replayRequest(id: string, tunnelName: string): Promise<boolean>
+    deleteAllRequests(): Promise<boolean>
+    requestDetail(id: string): Promise<Request>
   }
 }
 
-declare module "ngrok/download" {
+declare module 'ngrok/download' {
   function downloadNgrok(
     callback: (err?: Error) => void,
     options?: {
-      cafilePath: string;
-      arch: string;
-      cdnUrl: string;
-      cdnPath: string;
-      ignoreCache: boolean;
+      cafilePath: string
+      arch: string
+      cdnUrl: string
+      cdnPath: string
+      ignoreCache: boolean
     }
-  ): void;
-  export = downloadNgrok;
+  ): void
+  export = downloadNgrok
 }
