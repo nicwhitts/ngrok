@@ -48,7 +48,6 @@
     "@types/node": "^8.10.50",
     "decompress-zip": "^0.3.2",
     "exec": "^0.2.1",
-    "ffi-napi": "^4.0.2",
     "got": "^11.5.1",
     "simple-socks": "^2.1.0",
     "uuid": "^3.3.2",
