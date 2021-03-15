@@ -35,6 +35,7 @@ async function startProcess(opts) {
   if (opts.configPath) start.push('--config=' + opts.configPath)
   if (opts.binPath) dir = opts.binPath(dir)
 
+  console.log('dir', dir)
   const ngrok = spawn(bin, start, { cwd: dir })
 
   let resolve, reject
